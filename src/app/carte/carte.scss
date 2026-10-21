@@ -1,0 +1,359 @@
+:host {
+  --encre: #2b2433;
+  --papier: #f4f1ea;
+  --ligne: #c9d3e0;
+  --seine: #8fb3d9;
+  --crs: #2c4f9e;
+  --crs-voile: rgba(44, 79, 158, 0.28);
+  --rouge: #c8302c;
+  --menace: #e08a1e;
+  --libre: #2e8b57;
+
+  display: block;
+  color: var(--encre);
+  font-family: 'Caveat', cursive;
+}
+
+.campagne {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 16px;
+  padding: 16px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .campagne {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.plan {
+  position: relative;
+  border-radius: 12px;
+  background-color: var(--papier);
+  background-image: repeating-linear-gradient(transparent 0 31px, var(--ligne) 31px 32px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.periph {
+  fill: none;
+  stroke: var(--encre);
+  stroke-width: 3;
+  stroke-dasharray: 14 8;
+  opacity: 0.5;
+}
+
+.seine {
+  fill: none;
+  stroke: var(--seine);
+  stroke-width: 26;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+
+.nom-seine {
+  font-size: 18px;
+  fill: #4d7bb0;
+  font-style: italic;
+}
+
+.ile {
+  fill: var(--papier);
+  stroke: var(--encre);
+  stroke-width: 1.5;
+}
+
+.rue {
+  stroke: var(--encre);
+  stroke-width: 5;
+  stroke-linecap: round;
+
+  &.pont {
+    stroke-dasharray: 3 5;
+    stroke-width: 7;
+  }
+
+  &.possible {
+    stroke: var(--libre);
+    stroke-width: 7;
+  }
+
+  &.nassee {
+    stroke: var(--crs);
+    opacity: 0.55;
+  }
+}
+
+.lieu {
+  .socle {
+    fill: var(--papier);
+    stroke: var(--encre);
+    stroke-width: 3;
+  }
+
+  .icone {
+    fill: none;
+    stroke: var(--encre);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    .plein {
+      fill: var(--encre);
+    }
+  }
+
+  .point-interrogation {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 22px;
+    text-anchor: middle;
+    fill: var(--encre);
+    stroke: none;
+  }
+
+  .nom {
+    font-size: 17px;
+    font-weight: 700;
+    text-anchor: middle;
+    fill: var(--encre);
+    paint-order: stroke;
+    stroke: var(--papier);
+    stroke-width: 4px;
+  }
+
+  &.visite .icone {
+    opacity: 0.35;
+  }
+
+  &.accessible {
+    cursor: pointer;
+
+    .socle {
+      stroke: var(--libre);
+      stroke-width: 4;
+    }
+
+    &:hover .socle {
+      fill: #dff0e5;
+    }
+  }
+
+  &.menace .socle {
+    stroke: var(--menace);
+    stroke-dasharray: 5 4;
+    animation: clignote 1s ease-in-out infinite alternate;
+  }
+
+  &.nasse {
+    .socle {
+      fill: var(--crs-voile);
+      stroke: var(--crs);
+    }
+
+    .icone {
+      opacity: 0.25;
+    }
+  }
+
+  &.actuel .socle {
+    fill: #f6d9d5;
+    stroke: var(--rouge);
+  }
+
+  &.prefet .socle {
+    stroke-width: 4;
+    stroke: var(--rouge);
+  }
+}
+
+.bouclier {
+  fill: var(--crs);
+  stroke: #fff;
+  stroke-width: 1.5;
+
+  .crs {
+    font-family: system-ui, sans-serif;
+    font-size: 6px;
+    font-weight: 800;
+    text-anchor: middle;
+    fill: #fff;
+    stroke: none;
+  }
+}
+
+.cortege {
+  pointer-events: none;
+  transition: transform 0.45s ease-in-out;
+
+  .onde {
+    fill: none;
+    stroke: var(--rouge);
+    stroke-width: 3;
+    animation: onde 1.6s ease-out infinite;
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+
+  .drapeau {
+    fill: var(--rouge);
+    stroke: var(--encre);
+    stroke-width: 2.5;
+    stroke-linejoin: round;
+  }
+}
+
+@keyframes clignote {
+  to {
+    stroke-opacity: 0.3;
+  }
+}
+
+@keyframes onde {
+  from {
+    transform: scale(0.7);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+.fin {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  text-align: center;
+  border-radius: 12px;
+  background: rgba(44, 79, 158, 0.75);
+  color: #fff;
+  font-size: 40px;
+
+  &.victoire {
+    background: rgba(200, 48, 44, 0.75);
+  }
+
+  p {
+    margin: 0;
+    font-family: 'Permanent Marker', cursive;
+  }
+}
+
+.panneau {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--papier);
+  font-size: 20px;
+
+  h1 {
+    margin: 0;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 30px;
+    color: var(--rouge);
+  }
+}
+
+.sous-titre {
+  margin: 0;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  margin: 0;
+
+  dt {
+    font-size: 16px;
+    opacity: 0.7;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+  }
+}
+
+.jauge {
+  .barre {
+    height: 12px;
+    border: 2px solid var(--encre);
+    border-radius: 6px;
+    overflow: hidden;
+
+    div {
+      height: 100%;
+      background: var(--crs);
+      transition: width 0.4s;
+    }
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  border: 2px dashed var(--encre);
+  border-radius: 8px;
+
+  .alerte {
+    color: var(--crs);
+    font-weight: 700;
+  }
+}
+
+.journal {
+  flex: 1;
+  max-height: 260px;
+  overflow-y: auto;
+  margin: 0;
+  padding-left: 18px;
+  font-size: 17px;
+
+  li:first-child {
+    font-weight: 700;
+  }
+}
+
+.legende {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+
+  b {
+    display: inline-block;
+    width: 30px;
+  }
+
+  .bleu {
+    color: var(--crs);
+    font-size: 12px;
+  }
+}
+
+button {
+  padding: 8px 16px;
+  border: 3px solid var(--encre);
+  border-radius: 8px;
+  background: var(--rouge);
+  color: #fff;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 20px;
+  cursor: pointer;
+}

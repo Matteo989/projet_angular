@@ -1,0 +1,161 @@
+<div class="campagne">
+  <section class="plan">
+    <svg viewBox="0 0 1000 640" role="img" aria-label="Carte de Paris de la campagne">
+      <defs>
+        <filter id="crayon">
+          <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="3" />
+          <feDisplacementMap in="SourceGraphic" scale="3" />
+        </filter>
+      </defs>
+
+      <g filter="url(#crayon)">
+        <ellipse cx="500" cy="325" rx="485" ry="305" class="periph" />
+        <path [attr.d]="seine" class="seine" />
+        <text x="300" y="372" class="nom-seine">la Seine</text>
+        <ellipse cx="582" cy="383" rx="26" ry="11" class="ile" />
+
+        @for (rue of rues(); track rue.a.id + rue.b.id) {
+          <line
+            [attr.x1]="rue.a.x"
+            [attr.y1]="rue.a.y"
+            [attr.x2]="rue.b.x"
+            [attr.y2]="rue.b.y"
+            class="rue"
+            [class.pont]="rue.pont"
+            [class.nassee]="rue.nassee"
+            [class.possible]="rue.possible"
+          />
+        }
+      </g>
+
+      @for (lieu of campagne.lieux(); track lieu.id) {
+        <g
+          class="lieu"
+          [attr.transform]="'translate(' + lieu.x + ',' + lieu.y + ')'"
+          [class.accessible]="campagne.accessibles().has(lieu.id)"
+          [class.visite]="campagne.visites().has(lieu.id)"
+          [class.menace]="campagne.menaces().has(lieu.id)"
+          [class.nasse]="campagne.estNasse(lieu)"
+          [class.actuel]="lieu.id === campagne.position()"
+          [class.prefet]="lieu.type === 'prefet'"
+          (click)="campagne.deplacer(lieu.id)"
+          (mouseenter)="survol.set(lieu)"
+          (mouseleave)="survol.set(null)"
+        >
+          <circle [attr.r]="lieu.type === 'prefet' ? 26 : 17" class="socle" />
+          <g class="icone">
+            @switch (lieu.type) {
+              @case ('affrontement') {
+                <path d="M-10,-7 L-2,7 M-2,-7 L-10,7 M2,-7 L10,7 M10,-7 L2,7" />
+              }
+              @case ('evenement') {
+                <text y="7" class="point-interrogation">?</text>
+              }
+              @case ('soin') {
+                <path d="M-3,-9 h6 v6 h6 v6 h-6 v6 h-6 v-6 h-6 v-6 h6 z" />
+              }
+              @case ('bac') {
+                <circle cy="-2" r="7" />
+                <circle cx="-2.6" cy="-3" r="1.6" class="plein" />
+                <circle cx="2.6" cy="-3" r="1.6" class="plein" />
+                <path d="M-3,5 v4 M0,5 v4 M3,5 v4" />
+              }
+              @case ('cantine') {
+                <path d="M-9,0 h18 a9,8 0 0 1 -18,0 z M-3,-4 q2,-3 0,-6 M3,-4 q2,-3 0,-6" />
+              }
+              @case ('prefet') {
+                <circle cy="-3" r="12" />
+                <circle cx="-4.5" cy="-5" r="2.6" class="plein" />
+                <circle cx="4.5" cy="-5" r="2.6" class="plein" />
+                <path d="M-14,-14 L14,12 M14,-14 L-14,12 M-5,9 v5 M0,9 v5 M5,9 v5" />
+              }
+              @case ('depart') {
+                <path d="M-4,10 V-10 L9,-6 L-4,-1" />
+              }
+            }
+          </g>
+          <text [attr.y]="lieu.type === 'prefet' ? 42 : 32" class="nom">{{ lieu.nom }}</text>
+          @if (campagne.front().has(lieu.id)) {
+            <g class="bouclier" transform="translate(17,-15)">
+              <path d="M0,-11 L9,-7 L8,3 Q5,9 0,12 Q-5,9 -8,3 L-9,-7 Z" />
+              <text y="2" class="crs">CRS</text>
+            </g>
+          }
+        </g>
+      }
+
+      <g
+        class="cortege"
+        [attr.transform]="'translate(' + campagne.lieuActuel().x + ',' + campagne.lieuActuel().y + ')'"
+      >
+        <circle r="24" class="onde" />
+        <path d="M-2,8 V-14 L13,-10 L-2,-5" class="drapeau" />
+      </g>
+    </svg>
+
+    @if (campagne.statut() !== 'en-cours') {
+      <div class="fin" [class.victoire]="campagne.statut() === 'victoire'">
+        <p>{{ campagne.statut() === 'victoire' ? 'Le cortège tient Nation !' : 'Interpellé·e…' }}</p>
+        <button type="button" (click)="campagne.nouvellePartie()">Nouvelle manif</button>
+      </div>
+    }
+  </section>
+
+  <aside class="panneau">
+    <h1>Ni deck ni maître</h1>
+    <p class="sous-titre">Rejoindre Nation avant que la nasse ne se referme.</p>
+
+    <dl class="stats">
+      <div>
+        <dt>PV</dt>
+        <dd>{{ campagne.pv() }} / {{ campagne.pvMax }}</dd>
+      </div>
+      <div>
+        <dt>Tour</dt>
+        <dd>{{ campagne.tour() }}</dd>
+      </div>
+      <div>
+        <dt>Solidarité</dt>
+        <dd>{{ campagne.solidarite() }}</dd>
+      </div>
+      <div>
+        <dt>Deck</dt>
+        <dd>{{ campagne.cartes() }} cartes</dd>
+      </div>
+    </dl>
+
+    <div class="jauge" aria-label="Avancée de la nasse">
+      <span>Nasse</span>
+      <div class="barre"><div [style.width.%]="campagne.partNasse() * 100"></div></div>
+    </div>
+
+    <div class="info">
+      <strong>{{ infoBulle().nom }}</strong>
+      <span>{{ nomsTypes[infoBulle().type] }}</span>
+      @if (infoBulle().type !== 'prefet') {
+        @if (campagne.estNasse(infoBulle())) {
+          <em class="alerte">Tenu par les CRS</em>
+        } @else {
+          <em>Nassé dans {{ toursAvantNasse(infoBulle()) }} tour(s)</em>
+        }
+      }
+    </div>
+
+    <ol class="journal">
+      @for (ligne of campagne.journal(); track $index) {
+        <li>{{ ligne }}</li>
+      }
+    </ol>
+
+    <ul class="legende">
+      <li><b>⚔</b> Affrontement</li>
+      <li><b>?</b> Événement</li>
+      <li><b>+</b> Street medics</li>
+      <li><b>☠</b> BAC (élite)</li>
+      <li><b>♨</b> Cantine solidaire</li>
+      <li><b class="bleu">CRS</b> Front de la nasse</li>
+    </ul>
+
+    <button type="button" (click)="campagne.nouvellePartie()">Nouvelle carte</button>
+  </aside>
+</div>
