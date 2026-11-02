@@ -1,0 +1,254 @@
+<div class="calc">
+  <form class="card saisie" (submit)="$event.preventDefault()" aria-label="Vos nuits louées">
+    <div class="ligne-commune">
+      <div class="champ">
+        <label for="commune">Commune du logement</label>
+        <select id="commune" [value]="slug()" (change)="choisirCommune($any($event.target).value)">
+          @for (c of communes; track c.slug) {
+            <option [value]="c.slug" [selected]="c.slug === slug()">
+              {{ c.nom }} · {{ c.plafond }} nuits
+            </option>
+          }
+          <option value="" [selected]="slug() === ''">Autre commune</option>
+        </select>
+      </div>
+      @if (!commune()) {
+        <div class="champ petit">
+          <label for="plafond">Plafond</label>
+          <input
+            id="plafond"
+            type="number"
+            inputmode="numeric"
+            [min]="plafondMin"
+            [max]="plafondNational"
+            [value]="plafondPerso()"
+            (input)="majPlafond($any($event.target).value)"
+            aria-describedby="plafond-aide"
+          />
+        </div>
+      }
+    </div>
+    @if (commune(); as c) {
+      <p class="info-commune">
+        @if (c.verification === 'officielle') {
+          <span class="badge badge-ok">Vérifié</span>
+          {{ c.nom }} : {{ c.plafond }} nuits depuis le {{ c.depuis }}.
+        } @else {
+          <span class="badge badge-warn">À confirmer</span>
+          {{ c.nom }} : {{ c.plafond }} nuits annoncées. Vérifiez la délibération auprès de la mairie.
+        }
+      </p>
+    } @else {
+      <p class="info-commune" id="plafond-aide">
+        120 nuits par défaut. Mettez entre 90 et 119 si votre commune a voté une baisse.
+      </p>
+    }
+
+    <div class="onglets" role="group" aria-label="Méthode de calcul">
+      <button
+        type="button"
+        [attr.aria-pressed]="mode() === 'rapide'"
+        (click)="mode.set('rapide')"
+      >
+        Saisie rapide
+      </button>
+      <button
+        type="button"
+        [attr.aria-pressed]="mode() === 'ics'"
+        (click)="mode.set('ics')"
+      >
+        Importer mes calendriers
+      </button>
+    </div>
+
+    @if (mode() === 'rapide') {
+      <fieldset>
+        <legend>Nuits réservées en {{ annee() }}, passées et à venir</legend>
+        <div class="canaux">
+          @for (canal of canaux; track canal.id) {
+            <div class="canal">
+              <label [for]="'n-' + canal.id">
+                <span>{{ canal.libelle }}</span>
+                <small>{{ canal.aide }}</small>
+              </label>
+              <input
+                [id]="'n-' + canal.id"
+                type="number"
+                inputmode="numeric"
+                min="0"
+                max="366"
+                [value]="saisie()[canal.id]"
+                (input)="majSaisie(canal.id, $any($event.target).value)"
+              />
+            </div>
+          }
+        </div>
+        <p class="aide">
+          Exemple prérempli : remplacez les chiffres par les vôtres. Si une nuit apparaît sur deux
+          plateformes, ne la comptez qu’une fois.
+        </p>
+      </fieldset>
+    } @else {
+      <div class="import">
+        <label
+          class="depot"
+          for="fichiers"
+          [class.survol]="survol()"
+          (dragover)="$event.preventDefault(); survol.set(true)"
+          (dragleave)="survol.set(false)"
+          (drop)="deposer($event)"
+        >
+          <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <path
+              d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm7 7v5m-2.5-2.5h5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+            />
+          </svg>
+          <strong>Déposez vos fichiers .ics</strong>
+          <span>ou cliquez pour les choisir. Ils restent sur votre appareil.</span>
+        </label>
+        <input
+          id="fichiers"
+          class="visually-hidden"
+          type="file"
+          accept=".ics,text/calendar"
+          multiple
+          (change)="ajouterFichiers($any($event.target).files); $any($event.target).value = ''"
+        />
+        <details class="tuto">
+          <summary>Où trouver le fichier de mon calendrier ?</summary>
+          <ul>
+            <li>
+              <strong>Airbnb</strong> : Calendrier, Disponibilités, « Associer des calendriers »,
+              puis « Exporter le calendrier ». Ouvrez le lien et enregistrez le fichier.
+            </li>
+            <li>
+              <strong>Booking.com</strong> : Extranet, Tarifs et disponibilités, « Synchroniser les
+              calendriers », puis « Exporter ».
+            </li>
+            <li>
+              <strong>Abritel / Vrbo</strong> : Calendrier, « Importer et exporter », puis le lien
+              d’export.
+            </li>
+          </ul>
+        </details>
+
+        @if (erreurFichier()) {
+          <p class="erreur" role="alert">{{ erreurFichier() }}</p>
+        }
+
+        @if (evenementsAffiches().length) {
+          <div class="liste-entete">
+            <span>{{ evenementsAffiches().length }} périodes trouvées</span>
+            <span class="actions">
+              <button type="button" class="lien" (click)="toutCocher()">Tout compter</button>
+              <button type="button" class="lien" (click)="vider()">Vider</button>
+            </span>
+          </div>
+          <ul class="evenements">
+            @for (e of evenementsAffiches(); track e.id) {
+              <li [class.exclu]="!e.inclus">
+                <input
+                  type="checkbox"
+                  [id]="'e-' + $index"
+                  [checked]="e.inclus"
+                  (change)="basculer(e.id)"
+                />
+                <label [for]="'e-' + $index">
+                  <span class="dates num">{{ e.dates }}</span>
+                  <span class="titre">{{ e.titre }}</span>
+                  <span class="source">{{ e.source }}</span>
+                </label>
+                <span class="nuits num">{{ e.nuits }} n.</span>
+                @switch (e.nature) {
+                  @case ('reservation') {
+                    <span class="badge badge-ok">Réservation</span>
+                  }
+                  @case ('blocage') {
+                    <span class="badge">Blocage</span>
+                  }
+                  @default {
+                    <span class="badge badge-warn">À vérifier</span>
+                  }
+                }
+              </li>
+            }
+          </ul>
+          <p class="aide">
+            Les blocages Airbnb (« Not available ») sont décochés. Booking ne distingue pas
+            réservations et blocages : décochez les dates que vous avez seulement bloquées.
+            @if (doublons() > 0) {
+              <strong>{{ doublons() }} nuits en double entre vos calendriers ne sont comptées qu’une fois.</strong>
+            }
+          </p>
+        }
+      </div>
+    }
+  </form>
+
+  <section class="card resultat" [attr.data-etat]="etat()" aria-labelledby="titre-resultat">
+    <h3 id="titre-resultat" class="visually-hidden">Résultat</h3>
+    <div class="chiffres" aria-live="polite">
+      <p class="total num">
+        <span class="gros">{{ total() }}</span>
+        <span class="sur">/ {{ plafond() }} nuits</span>
+      </p>
+      @switch (etat()) {
+        @case ('ok') {
+          <p class="message"><span class="badge badge-ok">Dans les clous</span> Il vous reste
+            <strong class="num">{{ restant() }} nuits</strong> jusqu’au 31 décembre {{ annee() }}.</p>
+        }
+        @case ('attention') {
+          <p class="message"><span class="badge badge-warn">Attention</span> Plus de 80 % du plafond
+            est utilisé. Il reste <strong class="num">{{ restant() }} nuits</strong>.</p>
+        }
+        @case ('atteint') {
+          <p class="message"><span class="badge badge-warn">Plafond atteint</span> Plus aucune nuit
+            possible avant le 1er janvier {{ annee() + 1 }}.</p>
+        }
+        @case ('depasse') {
+          <p class="message"><span class="badge badge-danger">Plafond dépassé</span>
+            <strong class="num">{{ depassement() }} nuits de trop</strong>. Annulez ou déplacez ces
+            réservations : vous vous exposez à une amende civile.</p>
+        }
+      }
+    </div>
+
+    <div
+      class="jauge"
+      role="progressbar"
+      aria-label="Part du plafond utilisée"
+      [attr.aria-valuenow]="pourcentage()"
+      aria-valuemin="0"
+      aria-valuemax="100"
+    >
+      <span [style.width.%]="pourcentage()"></span>
+    </div>
+
+    <app-year-grid
+      [annee]="annee()"
+      [plafond]="plafond()"
+      [nuits]="mode() === 'ics' ? nuitsImportees() : null"
+      [compte]="total()"
+    />
+    <p class="legende">
+      <span><i class="pastille nuit"></i>Nuit comptée</span>
+      <span><i class="pastille depasse"></i>Au-delà du plafond</span>
+      @if (mode() === 'rapide') {
+        <span>En saisie rapide, les nuits sont rangées dans l’ordre, pas à leur vraie date.</span>
+      }
+    </p>
+
+    <div class="suite">
+      <p>Ne recomptez plus à la main : Nuitomètre suit vos calendriers et vous prévient avant le plafond.</p>
+      <a class="btn btn-primary" routerLink="/" fragment="beta">Être prévenu au lancement</a>
+    </div>
+    <p class="avertissement">
+      Calcul indicatif, pour une résidence principale louée en entier. Il ne remplace pas un
+      conseil juridique.
+    </p>
+  </section>
+</div>

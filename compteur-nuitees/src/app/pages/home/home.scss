@@ -1,0 +1,541 @@
+/* Héros */
+.hero {
+  background:
+    radial-gradient(1200px 500px at 85% -10%, rgb(243 178 60 / 10%), transparent 60%),
+    linear-gradient(180deg, var(--night) 0%, var(--night-2) 100%);
+  color: var(--night-ink);
+  padding-block: clamp(56px, 8vw, 104px);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+}
+.hero-texte {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.hero .eyebrow {
+  color: var(--lamp);
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--lamp);
+}
+.hero .lead {
+  color: var(--night-muted);
+}
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hero .btn-ghost {
+  color: var(--night-ink);
+  border-color: rgb(255 255 255 / 30%);
+}
+.garanties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+  color: var(--night-muted);
+}
+.garanties li::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 8px;
+  border-radius: 2px;
+  background: var(--lamp);
+  vertical-align: 1px;
+}
+
+.apercu {
+  margin: 0;
+  padding: clamp(18px, 2.5vw, 26px);
+  border-radius: 20px;
+  background: rgb(255 255 255 / 4%);
+  border: 1px solid rgb(255 255 255 / 10%);
+  box-shadow: 0 30px 80px -30px rgb(0 0 0 / 60%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.apercu-tete {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.apercu-tete div {
+  display: flex;
+  flex-direction: column;
+}
+.apercu-tete span:not(.badge) {
+  color: var(--night-muted);
+  font-size: 0.88rem;
+}
+.apercu-canaux {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.apercu-canaux li {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 5%);
+  font-size: 0.82rem;
+  color: var(--night-muted);
+}
+.apercu-canaux li span:last-child {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--night-ink);
+}
+.apercu-total {
+  font-size: 1rem;
+  color: var(--night-muted);
+}
+.apercu-total strong {
+  font-family: var(--f-display);
+  font-size: 2.4rem;
+  color: var(--lamp);
+  margin-right: 4px;
+}
+.apercu figcaption {
+  font-size: 0.8rem;
+  color: var(--night-muted);
+}
+
+/* Repères */
+.reperes {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding-block: 36px 24px;
+}
+.reperes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
+}
+.reperes-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.chiffre {
+  font-family: var(--f-display);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 760;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+}
+.source {
+  margin-top: 22px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Problème */
+.probleme {
+  background: var(--surface-2);
+}
+.probleme-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 40px;
+  align-items: center;
+}
+.probleme .section-head {
+  margin: 0;
+}
+.barres {
+  --label: 150px;
+  --pad: 24px;
+  position: relative;
+  padding: 28px var(--pad) 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.barre-ligne {
+  display: grid;
+  grid-template-columns: var(--label) 1fr;
+  align-items: center;
+}
+.etiquette {
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+.piste {
+  display: flex;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--cell);
+  overflow: hidden;
+}
+.seg {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+.seg.airbnb {
+  background: var(--lamp);
+  color: var(--lamp-ink);
+}
+.seg.booking {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.seg.trop {
+  background: repeating-linear-gradient(135deg, var(--danger) 0 6px, var(--danger-soft) 6px 10px);
+  padding: 0;
+}
+.barres-zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.plafond-ligne {
+  position: absolute;
+  top: -10px;
+  bottom: -6px;
+  width: 0;
+  border-left: 2px dashed var(--danger);
+  /* 120 nuits sur une échelle de 140 */
+  left: calc(var(--label) + (100% - var(--label)) * 0.857);
+}
+.plafond-ligne span {
+  position: absolute;
+  top: -18px;
+  right: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--danger);
+  white-space: nowrap;
+}
+.barres-note {
+  font-size: 0.95rem;
+}
+
+/* Étapes */
+.etapes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.etapes li {
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.etapes p {
+  color: var(--muted);
+}
+.etape-num {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  background: var(--night);
+  color: var(--lamp);
+  font-family: var(--f-display);
+  font-weight: 760;
+  font-size: 1.2rem;
+}
+
+/* Conciergeries */
+.concierge {
+  background: var(--surface);
+  border-block: 1px solid var(--line);
+}
+.concierge-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+.concierge-texte {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+}
+.atouts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.atouts li {
+  padding-left: 26px;
+  position: relative;
+  color: var(--muted);
+}
+.atouts li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--lamp);
+}
+.atouts strong {
+  color: var(--ink);
+}
+.dashboard {
+  margin: 0;
+  overflow: hidden;
+  min-width: 0;
+}
+.dash-tete {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+}
+.dash-exemple {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.dash-scroll {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+th {
+  text-align: left;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 12px 20px 8px;
+}
+td {
+  padding: 12px 20px;
+  border-top: 1px solid var(--line);
+  vertical-align: middle;
+}
+td strong {
+  display: block;
+}
+.ville {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.mini-jauge {
+  display: block;
+  width: 110px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--cell);
+  overflow: hidden;
+}
+.mini-jauge span {
+  display: block;
+  height: 100%;
+  background: var(--ok);
+}
+.mini-jauge[data-etat='attention'] span {
+  background: var(--lamp-strong);
+}
+.mini-jauge[data-etat='depasse'] span {
+  background: var(--danger);
+}
+
+/* Offres */
+.offres {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+.offre {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+.offre ul {
+  margin: 0;
+  padding-left: 1.1em;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.prix .num {
+  font-family: var(--f-display);
+  font-size: 2.4rem;
+  font-weight: 760;
+  letter-spacing: -0.03em;
+}
+.prix small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+.vedette {
+  border: 2px solid var(--accent);
+}
+.offre h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.note-prix {
+  margin-top: 18px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* Villes */
+.villes {
+  background: var(--surface-2);
+}
+.villes-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.ville-carte {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 20px;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.ville-carte.autre {
+  border-style: dashed;
+  box-shadow: none;
+  background: transparent;
+}
+.ville-carte:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+.ville-nom {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+.ville-plafond {
+  font-family: var(--f-display);
+  font-size: 2rem;
+  font-weight: 760;
+  line-height: 1.1;
+}
+.ville-plafond small {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* FAQ */
+.faq-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 48px;
+  align-items: start;
+}
+
+/* Bêta */
+.beta {
+  background: linear-gradient(180deg, var(--night-2), var(--night));
+  color: var(--night-ink);
+}
+.beta .eyebrow {
+  color: var(--lamp);
+}
+.beta .lead {
+  color: var(--night-muted);
+}
+.beta-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+.beta-texte {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.beta-form {
+  padding: clamp(20px, 3vw, 32px);
+  border-radius: 20px;
+  background: rgb(255 255 255 / 4%);
+  border: 1px solid rgb(255 255 255 / 10%);
+}
+
+@media (max-width: 960px) {
+  .hero-grid,
+  .probleme-grid,
+  .concierge-grid,
+  .faq-grid,
+  .beta-grid {
+    grid-template-columns: 1fr;
+  }
+  .reperes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .etapes,
+  .offres {
+    grid-template-columns: 1fr;
+  }
+  .villes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .barres {
+    --label: 96px;
+    --pad: 16px;
+  }
+  .apercu-canaux li span:last-child {
+    font-size: 1.1rem;
+  }
+}

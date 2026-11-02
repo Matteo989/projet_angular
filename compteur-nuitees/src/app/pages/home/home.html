@@ -1,0 +1,322 @@
+<!-- Héros : la nuit, et les nuits louées qui s'allument comme des fenêtres -->
+<section class="hero" aria-labelledby="titre-hero">
+  <div class="container hero-grid">
+    <div class="hero-texte">
+      <span class="eyebrow">Loi Le Meur · résidences principales</span>
+      <h1 id="titre-hero">Airbnb voit ses nuits.<br /><em>Nuitomètre les voit toutes.</em></h1>
+      <p class="lead">
+        Le plafond de 120 nuits par an, abaissé à 90 à Paris, Nice et dans d’autres villes,
+        s’applique à toutes vos locations additionnées. Nuitomètre compte Airbnb, Booking, Abritel et
+        vos locations en direct, et vous prévient avant le plafond.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-lamp" routerLink="/" fragment="calculateur">Calculer mes nuits</a>
+        <a class="btn btn-ghost" routerLink="/" fragment="conciergeries">Je suis une conciergerie</a>
+      </div>
+      <ul class="garanties">
+        <li>Gratuit</li>
+        <li>Sans inscription</li>
+        <li>Vos calendriers restent sur votre appareil</li>
+      </ul>
+    </div>
+
+    <figure class="apercu" aria-label="Exemple de suivi d’un logement">
+      <div class="apercu-tete">
+        <div>
+          <strong>T2 rue Oberkampf</strong>
+          <span>Paris 11e · résidence principale</span>
+        </div>
+        <span class="badge badge-warn">Attention</span>
+      </div>
+      <ul class="apercu-canaux num">
+        <li><span>Airbnb</span><span>46</span></li>
+        <li><span>Booking.com</span><span>31</span></li>
+        <li><span>En direct</span><span>6</span></li>
+      </ul>
+      <p class="apercu-total num"><strong>83</strong> / 90 nuits en {{ annee }}</p>
+      <app-year-grid [annee]="annee" [plafond]="90" [compte]="83" [surNuit]="true" [animer]="true" />
+      <figcaption>Exemple. Chaque case est une nuit de l’année : 7 nuits restantes.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- Repères légaux, avec leurs sources -->
+<section class="reperes" aria-label="Ce que dit la loi">
+  <div class="container reperes-grid">
+    <div>
+      <p class="chiffre num">120</p>
+      <p>nuits par an au maximum pour une résidence principale, partout en France.</p>
+    </div>
+    <div>
+      <p class="chiffre num">90</p>
+      <p>nuits dans les communes qui l’ont voté : Paris depuis 2025, Nice depuis 2026…</p>
+    </div>
+    <div>
+      <p class="chiffre num">25 000 €</p>
+      <p>d’amende civile au maximum en cas de dépassement, depuis mai 2026.</p>
+    </div>
+    <div>
+      <p class="chiffre num">15 000 €</p>
+      <p>si vous ne transmettez pas votre décompte de nuitées quand la mairie le demande.</p>
+    </div>
+  </div>
+  <p class="container source">
+    Source :
+    <a [href]="sources.guideMinistere.url" target="_blank" rel="noopener">{{ sources.guideMinistere.titre }}</a>.
+  </p>
+</section>
+
+<!-- Calculateur -->
+<section id="calculateur" class="section" aria-labelledby="titre-calc">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Calculateur gratuit</span>
+      <h2 id="titre-calc">Combien de nuits vous reste-t-il cette année ?</h2>
+      <p class="lead">
+        Choisissez votre commune, puis saisissez vos nuits par plateforme ou importez directement vos
+        calendriers. Les nuits en double entre plateformes sont comptées une seule fois.
+      </p>
+    </div>
+    <app-calculator />
+  </div>
+</section>
+
+<!-- Le problème -->
+<section id="probleme" class="section probleme" aria-labelledby="titre-probleme">
+  <div class="container probleme-grid">
+    <div class="section-head">
+      <span class="eyebrow">Le problème</span>
+      <h2 id="titre-probleme">Chaque plateforme ne voit que ses propres réservations</h2>
+      <p class="lead">
+        La loi oblige les plateformes à bloquer une résidence principale au plafond. Mais Airbnb ne
+        sait rien de vos réservations Booking, et aucune ne voit vos locations en direct. C’est à vous
+        de faire l’addition.
+      </p>
+    </div>
+    <div class="barres card" role="img" aria-label="70 nuits sur Airbnb et 60 sur Booking font 130 nuits, au-delà du plafond de 120 sans qu’aucune plateforme ne bloque.">
+      <div class="barres-zone">
+      <div class="barre-ligne">
+        <span class="etiquette">Ce que voit Airbnb</span>
+        <div class="piste"><span class="seg airbnb" style="width: 50%">70</span></div>
+      </div>
+      <div class="barre-ligne">
+        <span class="etiquette">Ce que voit Booking</span>
+        <div class="piste"><span class="seg booking" style="width: 42.86%">60</span></div>
+      </div>
+      <div class="barre-ligne">
+        <span class="etiquette"><strong>La réalité</strong></span>
+        <div class="piste">
+          <span class="seg airbnb" style="width: 50%">70</span><span class="seg booking" style="width: 35.71%">60</span><span class="seg trop" style="width: 7.14%"></span>
+        </div>
+      </div>
+        <div class="plafond-ligne" aria-hidden="true"><span>Plafond 120</span></div>
+      </div>
+      <p class="barres-note"><strong>130 nuits</strong> : aucune plateforme ne bloque, et vous êtes 10 nuits au-delà.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Fonctionnement : vraie séquence, donc numérotée -->
+<section id="fonctionnement" class="section" aria-labelledby="titre-fonct">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Fonctionnement</span>
+      <h2 id="titre-fonct">Trois minutes pour brancher vos calendriers, puis plus rien à faire</h2>
+    </div>
+    <ol class="etapes">
+      <li class="card">
+        <span class="etape-num" aria-hidden="true">1</span>
+        <h3>Collez vos liens de calendrier</h3>
+        <p>
+          Le lien iCal de chaque annonce Airbnb, Booking ou Abritel, et vos réservations directes.
+          Aucun accès à vos comptes n’est demandé.
+        </p>
+      </li>
+      <li class="card">
+        <span class="etape-num" aria-hidden="true">2</span>
+        <h3>Chaque nuit est comptée une fois</h3>
+        <p>
+          Nuitomètre retire les doublons entre plateformes, applique le plafond de votre commune et
+          remet le compteur à zéro le 1er janvier.
+        </p>
+      </li>
+      <li class="card">
+        <span class="etape-num" aria-hidden="true">3</span>
+        <h3>Alerte avant le plafond</h3>
+        <p>
+          Un email à 80 %, 90 % et 100 % du plafond. Et un relevé de nuitées prêt à envoyer si la
+          mairie vous le demande.
+        </p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- Conciergeries -->
+<section id="conciergeries" class="section concierge" aria-labelledby="titre-concierge">
+  <div class="container concierge-grid">
+    <div class="concierge-texte">
+      <span class="eyebrow">Pour les conciergeries</span>
+      <h2 id="titre-concierge">Tous les logements de vos propriétaires sur un seul écran</h2>
+      <p class="lead">
+        Un dépassement chez un propriétaire, c’est une amende pour lui et un client perdu pour vous.
+        Repérez les logements à risque d’un coup d’œil.
+      </p>
+      <ul class="atouts">
+        <li><strong>Tableau de bord multi-logements</strong>, trié par risque de dépassement.</li>
+        <li><strong>Rapport mensuel PDF</strong> envoyé à chaque propriétaire, à vos couleurs.</li>
+        <li><strong>Relevé de nuitées</strong> par logement, prêt pour la mairie.</li>
+        <li><strong>Plafond de chaque commune</strong> appliqué automatiquement.</li>
+      </ul>
+      <a class="btn btn-primary" routerLink="/" fragment="beta">Tester gratuitement 3 mois</a>
+    </div>
+
+    <figure class="dashboard card">
+      <div class="dash-tete">
+        <strong>Vos logements · {{ annee }}</strong>
+        <span class="dash-exemple">Données d’exemple</span>
+      </div>
+      <div class="dash-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Logement</th>
+              <th scope="col">Nuits</th>
+              <th scope="col"><span class="visually-hidden">Progression</span></th>
+              <th scope="col">État</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (l of logements; track l.nom) {
+              <tr>
+                <td>
+                  <strong>{{ l.nom }}</strong>
+                  <span class="ville">{{ l.ville }} · plafond {{ l.plafond }}</span>
+                </td>
+                <td class="num">{{ l.nuits }}/{{ l.plafond }}</td>
+                <td>
+                  <span class="mini-jauge" [attr.data-etat]="l.etat"><span [style.width.%]="l.pct"></span></span>
+                </td>
+                <td>
+                  @switch (l.etat) {
+                    @case ('depasse') { <span class="badge badge-danger">Dépassé</span> }
+                    @case ('attention') { <span class="badge badge-warn">Attention</span> }
+                    @default { <span class="badge badge-ok">OK</span> }
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- Tarifs -->
+<section id="tarifs" class="section" aria-labelledby="titre-tarifs">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Tarifs de lancement prévus</span>
+      <h2 id="titre-tarifs">Moins cher qu’une seule nuit de trop</h2>
+    </div>
+    <div class="offres">
+      <article class="card offre">
+        <h3>Calculateur</h3>
+        <p class="prix"><span class="num">0 €</span></p>
+        <ul>
+          <li>Calcul instantané, toutes plateformes</li>
+          <li>Import de fichiers de calendrier</li>
+          <li>Plafond de votre commune</li>
+        </ul>
+        <a class="btn btn-ghost" routerLink="/" fragment="calculateur">Utiliser le calculateur</a>
+      </article>
+      <article class="card offre">
+        <h3>Propriétaire</h3>
+        <p class="prix"><span class="num">4,90 €</span> <small>par logement et par mois</small></p>
+        <ul>
+          <li>Calendriers synchronisés automatiquement</li>
+          <li>Alertes email à 80, 90 et 100 %</li>
+          <li>Relevé de nuitées en PDF</li>
+        </ul>
+        <a class="btn btn-ghost" routerLink="/" fragment="beta">Rejoindre la bêta</a>
+      </article>
+      <article class="card offre vedette">
+        <h3>Conciergerie <span class="badge badge-warn">Bêta gratuite 3 mois</span></h3>
+        <p class="prix"><span class="num">2 €</span> <small>par logement et par mois, dès 10 logements</small></p>
+        <ul>
+          <li>Tableau de bord multi-logements</li>
+          <li>Rapports mensuels pour vos propriétaires</li>
+          <li>Accès pour toute votre équipe</li>
+        </ul>
+        <a class="btn btn-primary" routerLink="/" fragment="beta">Demander l’accès</a>
+      </article>
+    </div>
+    <p class="note-prix">Prix HT indicatifs, susceptibles d’évoluer avant l’ouverture. Sans engagement.</p>
+  </div>
+</section>
+
+<!-- Villes -->
+<section id="villes" class="section villes" aria-labelledby="titre-villes">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Plafond par ville</span>
+      <h2 id="titre-villes">Le plafond de votre commune</h2>
+      <p class="lead">
+        Nous indiquons d’où vient chaque information. « À confirmer » signifie que la baisse est
+        annoncée par plusieurs sources mais que nous n’avons pas encore lu la délibération.
+      </p>
+    </div>
+    <ul class="villes-grid">
+      @for (c of communes; track c.slug) {
+        <li>
+          <a class="card ville-carte" [routerLink]="['/plafond', c.slug]">
+            <span class="ville-nom">{{ c.nom }}</span>
+            <span class="ville-plafond num">{{ c.plafond }} <small>nuits</small></span>
+            @if (c.verification === 'officielle') {
+              <span class="badge badge-ok">Vérifié</span>
+            } @else {
+              <span class="badge badge-warn">À confirmer</span>
+            }
+          </a>
+        </li>
+      }
+      <li>
+        <a class="card ville-carte autre" routerLink="/" fragment="calculateur">
+          <span class="ville-nom">Autre commune</span>
+          <span class="ville-plafond num">120 <small>nuits</small></span>
+          <span class="badge">Plafond national</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section" aria-labelledby="titre-faq">
+  <div class="container faq-grid">
+    <div class="section-head">
+      <span class="eyebrow">Questions fréquentes</span>
+      <h2 id="titre-faq">Ce qu’il faut savoir sur le plafond</h2>
+      <p class="lead">Réponses tirées du guide officiel du ministère et des textes de loi.</p>
+    </div>
+    <app-faq-list [questions]="faq" />
+  </div>
+</section>
+
+<!-- Bêta -->
+<section id="beta" class="section beta" aria-labelledby="titre-beta">
+  <div class="container beta-grid">
+    <div class="beta-texte">
+      <span class="eyebrow">Bêta</span>
+      <h2 id="titre-beta">Soyez prévenu avant le plafond, automatiquement</h2>
+      <p class="lead">
+        La version avec synchronisation des calendriers et alertes ouvre bientôt. Les dix premières
+        conciergeries l’utilisent gratuitement pendant trois mois, en échange de leurs retours.
+      </p>
+    </div>
+    <div class="beta-form">
+      <app-waitlist />
+    </div>
+  </div>
+</section>
